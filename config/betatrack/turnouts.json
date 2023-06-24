@@ -6,8 +6,24 @@
       "type": "kato"
     },
     "effects": [
-      101,
-      201
+      {
+        "effectId": 101,
+        "state": "red"
+      },
+      {
+        "effectId": 201,
+        "state": 1
+      },
+      {
+        "effectId": 102,
+        "state": "green",
+        "delay": 3000
+      },
+      {
+        "effectId": 201,
+        "state": 1,
+        "delay": 3000
+      }
     ],
     "name": "BT1",
     "state": false,
