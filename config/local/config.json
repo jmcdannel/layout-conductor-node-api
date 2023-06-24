@@ -1,6 +1,6 @@
 {
-  "layoutId": "betatrack",
-  "name": "Beta Track Junction",
+  "layoutId": "tam",
+  "name": "Tamarack Junction",
   "modules": [
     "turnouts",
     "routes",
@@ -19,9 +19,9 @@
       "desc": "Arduino Direct Serial Control"
     },
     {
-      "type": "pi",
-      "id": "jmripi",
-      "desc": "RPi w/JMRI",
+      "type": "macOS",
+      "id": "MacMini",
+      "desc": "MacMini w/JMRI",
       "connectedDevices": ["cmd", "betatrack-serial"]
     }
   ],
@@ -30,14 +30,14 @@
       "id": "cmd-serial",
       "type": "serial",
       "device": "cmd",
-      "serial": "/dev/cu.usbmodem143301",
+      "serial": "/dev/cu.usbmodem2401",
       "baud": 115200
     },
     {
       "id": "betatrack-layout",
       "type": "serial",
       "device": "betatrack-serial",
-      "serial": "/dev/cu.usbserial-143430",
+      "serial": "/dev/cu.usbserial-230",
       "baud": 115200
     }
   ],
