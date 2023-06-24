@@ -2,6 +2,9 @@
   "type": "module",
   "dependencies": {
     "fs": "^0.0.1-security",
+    "react-native-logs": "^5.0.1",
+    "serialport": "^10.5.0",
+    "signale": "^1.4.0",
     "ws": "^8.13.0"
   }
 }

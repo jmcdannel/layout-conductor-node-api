@@ -1,3 +1,8 @@
+import { module, path as modulePath }  from './layout.mjs';
+import { writeFile } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import log from '../core/logger.mjs';
 
 import { module, path as modulePath }  from './layout.mjs';
 import { writeFile } from 'fs';
@@ -21,5 +26,7 @@ export const get = () => {
 }
 
 export default {
-  get
+  get,
+  process,
+  put
 };
