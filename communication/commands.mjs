@@ -1,5 +1,6 @@
 import { getById as getEffectById } from '../modules/effects.mjs';
 import interfaces from '../communication/interfaces.mjs';
+import log from '../core/logger.mjs';
 
 const tunroutCommand = turnout => {
   switch(turnout.config.type) {
@@ -39,12 +40,21 @@ const pinCommand = ({ pin, interface: iFaceId }, state, delay) => ({
   payload: { pin, state: !!state }
 });
 
+const soundCommand = ({ file, interface: iFaceId }, state, delay) => ({ 
+  iFaceId,
+  delay,
+  action: 'sound', 
+  payload: { file, state: !!state }
+});
+
 const effectCommand = (effect, action, delay) => {
   switch(effect.type) {
     case 'light':
       return pinCommand(action, effect.state, delay);
     case 'signal':
       return pinCommand(action, effect.state == action.state, delay);
+    case 'sound':
+      return soundCommand(action, effect.state == action.state, delay);
     default: 
       // no op
       break;
@@ -74,11 +84,13 @@ export const build = (module, commandType) => {
       // no op
       break;
   }
+  log.debug('[COMMANDS] commandList', commandList);
   return commandList;
 }
 
 export const send = (commands) => {
   const coms = [...new Set(commands.map(cmd => cmd.iFaceId))];
+  log.debug('[COMMANDS] coms', coms);
   const cmdFormatter = ({ action, payload }) => ({ action, payload });
   coms.map(iFaceId => {
     const { send, connection } = interfaces.interfaces[iFaceId];

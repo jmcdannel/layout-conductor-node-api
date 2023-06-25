@@ -1,6 +1,7 @@
 import { get as getLayoutConfig }  from '../modules/layout.mjs';
 import serial from './serial.mjs';
 import emulator from './emulator.mjs';
+import audioplayer from './audioplayer.mjs';
 import commands from './commands.mjs';
 import { getPorts } from '../scripts/listPorts.mjs';
 import log from '../core/logger.mjs';
@@ -27,6 +28,10 @@ const intialize = com => {
     case 'serial':
       com.connection = serial.connect(com);
       com.send = serial.send;
+      break;
+    case 'howler':
+      com.connection = audioplayer.connect(com);
+      com.send = audioplayer.send;
       break;
     case 'default':
       log.warn('[INTERFACES] Interface type not found', com.type);

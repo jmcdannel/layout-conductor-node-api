@@ -28,17 +28,22 @@
   "interfaces": [
     {
       "id": "cmd-serial",
-      "type": "serial",
+      "type": "emulate",
       "device": "cmd",
       "serial": "/dev/cu.usbmodem143101",
       "baud": 115200
     },
     {
       "id": "betatrack-layout",
-      "type": "serial",
+      "type": "emulate",
       "device": "betatrack-serial",
       "serial": "/dev/tty.usbserial-14330",
       "baud": 115200
+    },
+    {
+      "id": "howler",
+      "type": "howler",
+      "device": "MacMini"
     }
   ],
   "apiHost": "localhost",
