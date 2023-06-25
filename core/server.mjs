@@ -5,25 +5,21 @@ import log from './logger.mjs'
 const port = 8080; // TODO: move to config
 const serverId = 'TamarackJunctionWebsocketServer'; // TODO: move to config
 
-const sendMessage = (msg, ws) => {
-  ws.send(JSON.stringify({
-    action: 'message',
-    payload: msg
-  }));
-}
+const MSG_CONNECTED = JSON.stringify({
+  action: 'message',
+  payload: `${serverId} is connected`
+})
 
 const receiveMessage = (data, ws) => {
   const msg = JSON.parse(data);
   const { action } = msg;
   const payload = reduce(msg);
   const command = JSON.stringify({ action, payload });
-  // log.info('receiveMessage: %s', command);
-  // log.info('payload: %s', JSON.stringify(payload));
   payload && ws.send(command);
 }
 
 const handleClose = () => {
-  log.info('[SERVER] the client has connected');
+  log.info('[SERVER] connection closed');
 }
 
 const handleError = err => {
@@ -31,20 +27,19 @@ const handleError = err => {
 }
 
 const handleConnection = ws => {
-  log.success('[SERVER] new client connected');
-
-  // sending message to client
-  sendMessage(`${serverId} is connected`, ws);
-
-  // handling what to do when clients disconnects from server
-  ws.on('close', handleClose);
-  
   // handling client connection error
   ws.onerror = handleError;
 
-  ws.on('message', function message(data) {
-    receiveMessage(data, ws);
-  });
+  log.success('[SERVER] new client connected');
+
+  // handling what to do when clients disconnects from server
+  ws.on('close', handleClose);
+
+  // handling what to do when messageis recieved
+  ws.on('message', (data) => receiveMessage(data, ws));
+
+  // sending message to client
+  ws.send(MSG_CONNECTED);
 }
 
 const connect = () => {
@@ -52,6 +47,5 @@ const connect = () => {
   wss.on('connection', handleConnection);
   log.start('[SERVER] The WebSocket server is running on port 8080');
 }
-
 
 export default { connect };

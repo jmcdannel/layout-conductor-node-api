@@ -15,7 +15,7 @@ const save = effects => {
   const modPath = path.resolve(__dirname, modulePath(EFFECTS));
   writeFile(modPath, JSON.stringify(effects), function(err) {
     if (err) throw err;
-    log.success('[EFFECTS] save effects complete');
+    log.success('[EFFECTS] saved');
   });
 }
 
@@ -27,12 +27,8 @@ export const getById = Id => {
   return effectList.find(e => e.effectId === Id );
 }
 
-export const exec = effects => {
-
-}
-
 export const get = ({ Id} ) => {
-  log.debug('[EFFECTS] effects.get');
+  log.debug('[EFFECTS] get');
   return Id ? getById(Id) : effectList;
 }
 
@@ -41,9 +37,9 @@ export const put = ({ Id, data }) => {
   if (effect) {
     effect.state = data.state;
     run(effect);
-    save(effects);
+    save(effectList);
   }
-  return effects;
+  return effectList;
 }
 
 export const process = payload => {
@@ -54,6 +50,5 @@ export default {
   get,
   process,
   put,
-  exec,
   getById
 };

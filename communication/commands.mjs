@@ -1,27 +1,50 @@
 import { getById as getEffectById } from '../modules/effects.mjs';
 import interfaces from '../communication/interfaces.mjs';
 
-const tunroutCommand = turnout=> ({
-  iFaceId: turnout.config.interface,
-  action: 'turnout', 
-  payload: { 
-    turnout: turnout.config.turnoutIdx, 
-    state: turnout.state 
+const tunroutCommand = turnout => {
+  switch(turnout.config.type) {
+    case 'kato':
+      return {
+        iFaceId: turnout.config.interface,
+        action: 'turnout', 
+        payload: { 
+          turnout: turnout.config.turnoutIdx, 
+          state: turnout.state 
+        }
+      };
+    case 'servo':
+      return {
+        iFaceId: turnout.config.interface,
+        action: 'servo', 
+        payload: { 
+          servo: turnout.config.servo, 
+          value: turnout.state 
+            ? turnout.config.straight 
+            : turnout.config.divergent, 
+          current: !turnout.state 
+            ? turnout.config.straight 
+            : turnout.config.divergent
+        }
+      };
+    default:
+      // no op
+      break;
   }
-});
+}
 
-const pinCommand = ({ pin, interface: iFaceId }, state) => ({ 
+const pinCommand = ({ pin, interface: iFaceId }, state, delay) => ({ 
   iFaceId,
+  delay,
   action: 'pin', 
   payload: { pin, state: !!state }
 });
 
-const effectCommand = (effect, action) => {
+const effectCommand = (effect, action, delay) => {
   switch(effect.type) {
     case 'light':
-      return pinCommand(action, effect.state);
+      return pinCommand(action, effect.state, delay);
     case 'signal':
-      return pinCommand(action, effect.state == action.state);
+      return pinCommand(action, effect.state == action.state, delay);
     default: 
       // no op
       break;
@@ -38,7 +61,7 @@ export const build = (module, commandType) => {
       turnout.effects && turnout.effects.filter(efx => !efx.delay).map(turnoutEffect => {
         const effect = getEffectById(turnoutEffect.effectId);
         effect.state = turnoutEffect.state;
-        const effectCommandList = effect?.actions.map(action => effectCommand(effect, action));
+        const effectCommandList = effect?.actions.map(action => effectCommand(effect, action, turnoutEffect.delay));
         commandList = commandList.concat(effectCommandList);
       });
       break;

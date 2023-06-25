@@ -1,1 +1,49 @@
-[{"actions":[{"interface":"betatrack-layout","pin":4,"state":"green"},{"interface":"betatrack-layout","pin":3,"state":"yellow"},{"interface":"betatrack-layout","pin":2,"state":"red"}],"effectId":101,"name":"Beta Track Signal 1","state":null,"type":"signal"},{"actions":[{"interface":"betatrack-layout","pin":5}],"effectId":201,"name":"Train LED","state":1,"type":"light"},{"actions":[{"interface":"betatrack-layout","pin":11}],"effectId":202,"name":"LED Strip","state":1,"type":"light"}]
+[
+  {
+    "actions": [
+      {
+        "interface": "betatrack-layout",
+        "pin": 4,
+        "state": "green"
+      },
+      {
+        "interface": "betatrack-layout",
+        "pin": 3,
+        "state": "yellow"
+      },
+      {
+        "interface": "betatrack-layout",
+        "pin": 2,
+        "state": "red"
+      }
+    ],
+    "effectId": 101,
+    "name": "Beta Track Signal 1",
+    "state": "red",
+    "type": "signal"
+  },
+  {
+    "actions": [
+      {
+        "interface": "betatrack-layout",
+        "pin": 5
+      }
+    ],
+    "effectId": 201,
+    "name": "Train LED",
+    "state": 1,
+    "type": "light"
+  },
+  {
+    "actions": [
+      {
+        "interface": "betatrack-layout",
+        "pin": 11
+      }
+    ],
+    "effectId": 202,
+    "name": "LED Strip",
+    "state": 1,
+    "type": "light"
+  }
+]

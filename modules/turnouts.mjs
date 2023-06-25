@@ -8,35 +8,37 @@ import log from '../core/logger.mjs';
 const TURNOUTS = 'turnouts';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const turnoutList =  module(TURNOUTS);
 
 const save = turnouts => {
   const modPath = path.resolve(__dirname, modulePath(TURNOUTS));
   writeFile(modPath, JSON.stringify(turnouts), function(err) {
     if (err) throw err;
-    log.log('[TURNOUTS] save complete');
+    log.log('[TURNOUTS] saved');
   });
 }
 
-const run = (turnout, state) => {
-  const { interface: iFaceId } = turnout.config;
-  const com = interfaces.interfaces[iFaceId];
-  log.debug('[TURNOUTS] run', turnout.name, turnout.config.turnoutIdx, state);
+const run = (turnout) => {
   interfaces.handleCommands(turnout, 'turnout');
 }
 
-export const get = () => {
-  return module(TURNOUTS);
+export const getById = Id => {
+  return turnoutList.find(e => e.turnoutId === Id );
+}
+
+export const get = ({ Id} ) => {
+  log.debug('[TURNOUTS] get');
+  return Id ? getById(Id) : turnoutList;
 }
 
 export const put = ({ Id, data }) => {
-  const turnouts = get();
-  const turnout = turnouts.find(e => e.turnoutId === Id );
+  const turnout = turnoutList.find(e => e.turnoutId === Id );
   if (turnout) {
     turnout.state = data.state;
-    run(turnout, data.state)
-    save(turnouts);
+    run(turnout);
+    save(turnoutList);
   }
-  return turnouts;
+  return turnoutList;
 }
 
 export const process = payload => {
@@ -46,5 +48,6 @@ export const process = payload => {
 export default {
   get,
   process,
-  put
+  put,
+  getById
 };

@@ -28,14 +28,14 @@
   "interfaces": [
     {
       "id": "cmd-serial",
-      "type": "emulate",
+      "type": "serial",
       "device": "cmd",
       "serial": "/dev/cu.usbmodem143101",
       "baud": 115200
     },
     {
       "id": "betatrack-layout",
-      "type": "emulate",
+      "type": "serial",
       "device": "betatrack-serial",
       "serial": "/dev/tty.usbserial-14330",
       "baud": 115200
