@@ -9,62 +9,35 @@ import log from '../core/logger.mjs';
 const EFFECTS = 'effects';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const effectList =  module(EFFECTS);
 
 const save = effects => {
   const modPath = path.resolve(__dirname, modulePath(EFFECTS));
   writeFile(modPath, JSON.stringify(effects), function(err) {
     if (err) throw err;
-    log.success('save effects complete');
+    log.success('[EFFECTS] save effects complete');
   });
 }
 
-const run = ({ type: effectType, actions, state}) => {
-  actions.reduce((list, action) => {
-    log.debug('run action', action, effectType);
-    const { interface: iFaceId } = action; 
-    let listIem = list.find(l => l.iFaceId === iFaceId);
-    if (!listIem) {
-      listIem = { iFaceId, commands: [] };
-      list.push(listIem);
-    }
-
-    switch(effectType) {
-      case 'light':
-        listIem.commands.push(getPinAction(action, state));
-        break;
-      case 'signal':
-        listIem.commands.push(getPinAction(action, state == action.state));
-        break;
-      default: 
-        // no op
-        break;
-    }
-    return list;
-  }, []).map(({ iFaceId, commands }) => {
-      const comInterface = interfaces.interfaces[iFaceId];
-      if (comInterface.type === 'serial') {
-        comInterface.send(comInterface.connection, commands);
-      }
-  });
+const run = effect => {
+  interfaces.handleCommands(effect, 'effect');
 }
 
-const getPinAction = ({ pin }, state) => ({ 
-  action: 'pin', 
-  payload: { pin, state: !!state }
-});
+export const getById = Id => {
+  return effectList.find(e => e.effectId === Id );
+}
 
 export const exec = effects => {
 
 }
 
-export const get = () => {
-  log.debug('effects.get');
-  return module(EFFECTS);
+export const get = ({ Id} ) => {
+  log.debug('[EFFECTS] effects.get');
+  return Id ? getById(Id) : effectList;
 }
 
 export const put = ({ Id, data }) => {
-  const effects = get();
-  const effect = effects.find(e => e.effectId === Id );
+  const effect = getById(Id);
   if (effect) {
     effect.state = data.state;
     run(effect);
@@ -74,12 +47,13 @@ export const put = ({ Id, data }) => {
 }
 
 export const process = payload => {
-  return payload?.Id && payload?.data ? put(payload) : get();
+  return payload?.Id && payload?.data ? put(payload) : get(payload);
 }
 
 export default {
   get,
   process,
   put,
-  exec
+  exec,
+  getById
 };

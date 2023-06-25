@@ -2,8 +2,7 @@ import { module, path as modulePath }  from './layout.mjs';
 import { writeFile } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import interfaces from '../core/interfaces.mjs';
-import effects from '../modules/effects.mjs';
+import interfaces from '../communication/interfaces.mjs';
 import log from '../core/logger.mjs';
 
 const TURNOUTS = 'turnouts';
@@ -14,22 +13,15 @@ const save = turnouts => {
   const modPath = path.resolve(__dirname, modulePath(TURNOUTS));
   writeFile(modPath, JSON.stringify(turnouts), function(err) {
     if (err) throw err;
-    log.log('turnouts.save complete');
+    log.log('[TURNOUTS] save complete');
   });
 }
 
 const run = (turnout, state) => {
   const { interface: iFaceId } = turnout.config;
   const com = interfaces.interfaces[iFaceId];
-  log.debug('turnout', turnout.name, turnout.config.turnoutIdx, state);
-
-  if (com.type === 'serial') {
-    com.send(com.connection, [{ 
-      action: 'turnout', 
-      payload: { turnout: turnout.config.turnoutIdx, state }
-    }]);
-  }
-
+  log.debug('[TURNOUTS] run', turnout.name, turnout.config.turnoutIdx, state);
+  interfaces.handleCommands(turnout, 'turnout');
 }
 
 export const get = () => {
