@@ -1,27 +1,35 @@
 import { get as getLayoutConfig }  from '../modules/layout.mjs';
+
 import serial from './serial.mjs';
+import emulator from './emulator.mjs';
+
 import { getPorts } from '../scripts/listPorts.mjs';
-import log from './logger.mjs';
+import log from '../core/logger.mjs';
 
 const config = getLayoutConfig();
 const interfaces = {};
 
+const identifySerialConnections = async () => {
+  const serialPorts = await getPorts();
+  return serialPorts;
+}
+
 const intialize = com => {
+  log.info('[INTERFACES] intializing', com?.type, com?.id);
   switch(com.type) {
+    case 'emulate':
+      com.connection = emulator.connect(com);
+      com.send = emulator.send;
+      break;
     case 'serial':
       com.connection = serial.connect(com);
       com.send = serial.send;
       break;
     case 'default':
-      log.warn('Interface type not found', com.type);
+      log.warn('[INTERFACES] Interface type not found', com.type);
       break;
   }
   interfaces[com.id] = com;
-}
-
-const identifySerialConnections = async () => {
-  const serialPorts = await getPorts();
-  log.info('identifySerialConnections', serialPorts);
 }
 
 const connect = async () => {

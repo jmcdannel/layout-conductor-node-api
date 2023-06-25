@@ -3,8 +3,7 @@ import { module, path as modulePath }  from './layout.mjs';
 import { writeFile } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import serial from '../core/serial.mjs';
-import interfaces from '../core/interfaces.mjs';
+import interfaces from '../communication/interfaces.mjs';
 import log from '../core/logger.mjs';
 
 const EFFECTS = 'effects';

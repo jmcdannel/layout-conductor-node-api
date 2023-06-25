@@ -4,6 +4,7 @@ import routes from '../modules/routes.mjs';
 import locos from '../modules/locos.mjs';
 import effects from '../modules/effects.mjs';
 
+// TODO: refactor - is this really a reducer as it was originally intended?
 export const reduce = ({ action, payload }) => {
   let res = {};
   switch(action) {

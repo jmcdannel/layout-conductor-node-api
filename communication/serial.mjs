@@ -1,5 +1,5 @@
 import { SerialPort } from 'serialport';
-import log from './logger.mjs';
+import log from '../core/logger.mjs';
 
 const connect = com => {
 

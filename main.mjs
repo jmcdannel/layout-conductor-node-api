@@ -1,5 +1,5 @@
 import server from './core/server.mjs';
-import interfaces from './core/interfaces.mjs';
+import interfaces from './communication/interfaces.mjs';
 import log from './core/logger.mjs'
 
 try {

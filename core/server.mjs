@@ -2,8 +2,8 @@ import { WebSocketServer } from 'ws';
 import { reduce } from './reducer.mjs';
 import log from './logger.mjs'
 
-const port = 8080;
-const serverId = 'TamarackJunctionWebsocketServer';
+const port = 8080; // TODO: move to config
+const serverId = 'TamarackJunctionWebsocketServer'; // TODO: move to config
 
 const sendMessage = (msg, ws) => {
   ws.send(JSON.stringify({
@@ -26,21 +26,21 @@ const receiveMessage = (data, ws) =>{
 }
 
 const handleClose = () => {
-  log.info("the client has connected");
+  log.info('[SERVER] the client has connected');
 }
 
-const handleError = () => {
-  log.error("Some Error occurred");
+const handleError = err => {
+  log.error('[SERVER] Unexpected error occurred', err);
 }
 
 const handleConnection = ws => {
-  log.success("new client connected", ws);
+  log.success('[SERVER] new client connected');
 
   // sending message to client
   sendMessage(`${serverId} is connected`, ws);
 
   // handling what to do when clients disconnects from server
-  ws.on("close", handleClose);
+  ws.on('close', handleClose);
   
   // handling client connection error
   ws.onerror = handleError;
@@ -53,7 +53,7 @@ const handleConnection = ws => {
 const connect = () => {
   const wss = new WebSocketServer({ port });
   wss.on('connection', handleConnection);
-  log.start("The WebSocket server is running on port 8080");
+  log.start('[SERVER] The WebSocket server is running on port 8080');
 }
 
 
