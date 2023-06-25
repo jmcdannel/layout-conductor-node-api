@@ -2,6 +2,8 @@ import { module, path as modulePath }  from './layout.mjs';
 import { writeFile } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import interfaces from '../core/interfaces.mjs';
+import effects from '../modules/effects.mjs';
 import log from '../core/logger.mjs';
 
 const TURNOUTS = 'turnouts';
@@ -12,21 +14,34 @@ const save = turnouts => {
   const modPath = path.resolve(__dirname, modulePath(TURNOUTS));
   writeFile(modPath, JSON.stringify(turnouts), function(err) {
     if (err) throw err;
-    log.success('save turnouts complete');
+    log.log('turnouts.save complete');
   });
 }
 
+const run = (turnout, state) => {
+  const { interface: iFaceId } = turnout.config;
+  const com = interfaces.interfaces[iFaceId];
+  log.debug('turnout', turnout.name, turnout.config.turnoutIdx, state);
+
+  if (com.type === 'serial') {
+    com.send(com.connection, [{ 
+      action: 'turnout', 
+      payload: { turnout: turnout.config.turnoutIdx, state }
+    }]);
+  }
+
+}
+
 export const get = () => {
-  log.debug('turnouts.get');
   return module(TURNOUTS);
 }
 
-export const put = ({ Id, data}) => {
+export const put = ({ Id, data }) => {
   const turnouts = get();
   const turnout = turnouts.find(e => e.turnoutId === Id );
   if (turnout) {
-    turnout = {...turnout, ...data};
-    // turnout.state = data.state;
+    turnout.state = data.state;
+    run(turnout, data.state)
     save(turnouts);
   }
   return turnouts;
