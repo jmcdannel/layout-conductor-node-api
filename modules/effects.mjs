@@ -3,7 +3,6 @@ import { module, path as modulePath }  from './layout.mjs';
 import { writeFile } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import serial from '../core/serial.mjs';
 import interfaces from '../core/interfaces.mjs';
 import log from '../core/logger.mjs';
 
@@ -19,13 +18,42 @@ const save = effects => {
   });
 }
 
-const run = (action, state) => {
-  const com = interfaces.interfaces[action['interface']];
-  log.debug('action', action);
+const run = ({ type: effectType, actions, state}) => {
+  actions.reduce((list, action) => {
+    log.debug('run action', action, effectType);
+    const { interface: iFaceId } = action; 
+    let listIem = list.find(l => l.iFaceId === iFaceId);
+    if (!listIem) {
+      listIem = { iFaceId, commands: [] };
+      list.push(listIem);
+    }
 
-  if (action.interface === 'betatrack-layout') {
-    com.send(com.connection, action, state);
-  }
+    switch(effectType) {
+      case 'light':
+        listIem.commands.push(getPinAction(action, state));
+        break;
+      case 'signal':
+        listIem.commands.push(getPinAction(action, state == action.state));
+        break;
+      default: 
+        // no op
+        break;
+    }
+    return list;
+  }, []).map(({ iFaceId, commands }) => {
+      const comInterface = interfaces.interfaces[iFaceId];
+      if (comInterface.type === 'serial') {
+        comInterface.send(comInterface.connection, commands);
+      }
+  });
+}
+
+const getPinAction = ({ pin }, state) => ({ 
+  action: 'pin', 
+  payload: { pin, state: !!state }
+});
+
+export const exec = effects => {
 
 }
 
@@ -39,7 +67,7 @@ export const put = ({ Id, data }) => {
   const effect = effects.find(e => e.effectId === Id );
   if (effect) {
     effect.state = data.state;
-    effect.actions.map(action => run(action, data.state));
+    run(effect);
     save(effects);
   }
   return effects;
@@ -52,5 +80,6 @@ export const process = payload => {
 export default {
   get,
   process,
-  put
+  put,
+  exec
 };

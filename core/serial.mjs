@@ -41,13 +41,13 @@ const connect = com => {
   return port;
 }
 
-const send = (port, { pin }, state) => {
-  const payload = { pin, state };
-  port.write(`${JSON.stringify(payload)}\n`, err => {
+const send = (port, data) => {
+  log.start('writing to port', JSON.stringify(data));
+  port.write(`${JSON.stringify(data)}\n`, err => {
     if (err) {
       return log.error('Error on write: ', err.message);
     }
-    log.log('payload written', payload);
+    // log.log('data written', data);
   });
 };
 

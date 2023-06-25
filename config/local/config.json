@@ -1,6 +1,6 @@
 {
-  "layoutId": "tam",
-  "name": "Tamarack Junction",
+  "layoutId": "betatrack",
+  "name": "Beta Track Junction",
   "modules": [
     "turnouts",
     "routes",
@@ -30,14 +30,14 @@
       "id": "cmd-serial",
       "type": "serial",
       "device": "cmd",
-      "serial": "/dev/cu.usbmodem2401",
+      "serial": "/dev/cu.usbmodem143101",
       "baud": 115200
     },
     {
       "id": "betatrack-layout",
       "type": "serial",
       "device": "betatrack-serial",
-      "serial": "/dev/cu.usbserial-230",
+      "serial": "/dev/tty.usbserial-14330",
       "baud": 115200
     }
   ],
