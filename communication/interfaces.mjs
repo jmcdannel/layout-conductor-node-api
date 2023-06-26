@@ -29,7 +29,7 @@ const intialize = com => {
       com.connection = serial.connect(com);
       com.send = serial.send;
       break;
-    case 'howler':
+    case 'audio':
       com.connection = audioplayer.connect(com);
       com.send = audioplayer.send;
       break;

@@ -41,8 +41,8 @@
       "baud": 115200
     },
     {
-      "id": "howler",
-      "type": "howler",
+      "id": "audio",
+      "type": "audio",
       "device": "MacMini"
     }
   ],

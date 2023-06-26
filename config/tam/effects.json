@@ -3,8 +3,7 @@
     "actions": [
       {
         "file": "departing-train.wav",
-        "interface": "mqttMain",
-        "player": "traincontrol-pygame"
+        "interface": "audio"
       }
     ],
     "effectId": 202,
@@ -16,8 +15,7 @@
     "actions": [
       {
         "file": "bike-horn-1.wav",
-        "interface": "mqttMain",
-        "player": "traincontrol-pygame"
+        "interface": "audio"
       }
     ],
     "effectId": 203,
@@ -29,8 +27,7 @@
     "actions": [
       {
         "file": "diesel-train-arrives-and-departs.wav",
-        "interface": "mqttMain",
-        "player": "traincontrol-pygame"
+        "interface": "audio"
       }
     ],
     "effectId": 204,
@@ -42,8 +39,7 @@
     "actions": [
       {
         "file": "noisy-street-car-moving.wav",
-        "interface": "mqttMain",
-        "player": "traincontrol-pygame"
+        "interface": "audio"
       }
     ],
     "effectId": 205,
@@ -55,8 +51,7 @@
     "actions": [
       {
         "file": "train-upon-us.wav",
-        "interface": "mqttMain",
-        "player": "traincontrol-pygame"
+        "interface": "audio"
       }
     ],
     "effectId": 206,
@@ -67,7 +62,7 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 41
       }
     ],
@@ -79,7 +74,7 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 39
       }
     ],
@@ -91,7 +86,7 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 43
       }
     ],
@@ -103,17 +98,17 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 36,
         "state": "green"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 35,
         "state": "yellow"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 34,
         "state": "red"
       }
@@ -126,17 +121,17 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 24,
         "state": "green"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 22,
         "state": "yellow"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 23,
         "state": "red"
       }
@@ -149,17 +144,17 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 27,
         "state": "green"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 25,
         "state": "yellow"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 26,
         "state": "red"
       }
@@ -172,17 +167,17 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 30,
         "state": "green"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 28,
         "state": "yellow"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 29,
         "state": "red"
       }
@@ -195,17 +190,17 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 33,
         "state": "green"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 31,
         "state": "yellow"
       },
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 32,
         "state": "red"
       }
@@ -218,7 +213,7 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 51
       }
     ],
@@ -230,7 +225,7 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 49
       }
     ],
@@ -242,7 +237,7 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 47
       }
     ],
@@ -254,7 +249,7 @@
   {
     "actions": [
       {
-        "interface": "station-serial",
+        "interface": "station-serial-north",
         "pin": 45
       }
     ],

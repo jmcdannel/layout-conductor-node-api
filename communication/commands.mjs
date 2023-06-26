@@ -50,6 +50,7 @@ const soundCommand = ({ file, interface: iFaceId }, state, delay) => ({
 const effectCommand = (effect, action, delay) => {
   switch(effect.type) {
     case 'light':
+    case 'frog':
       return pinCommand(action, effect.state, delay);
     case 'signal':
       return pinCommand(action, effect.state == action.state, delay);
