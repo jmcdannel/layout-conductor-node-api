@@ -7,10 +7,10 @@ module.exports = class Player {
     this.play = (sound) => {
       player.play(sound)
         .then(() => {
-          console.log('Audio done playing');
+          console.log('[AFPLAERY] Audio done playing');
         })
         .catch(error => {
-          console.log('Error playing file');
+          console.log('[AFPLAERY] Error playing file');
         });
 
     }

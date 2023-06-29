@@ -22,28 +22,34 @@
       "type": "macOS",
       "id": "MacMini",
       "desc": "MacMini w/JMRI",
-      "connectedDevices": ["cmd", "betatrack-serial"]
+      "connectedDevices": [
+        "cmd",
+        "betatrack-serial"
+      ]
     }
   ],
   "interfaces": [
     {
       "id": "cmd-serial",
-      "type": "emulate",
+      "type": "cmd-ex",
       "device": "cmd",
-      "serial": "/dev/cu.usbmodem143101",
-      "baud": 115200
+      "serial": "/dev/tty.usbmodem2401",
+      "baud": 115200,
+      "status": "fail"
     },
     {
       "id": "betatrack-layout",
-      "type": "emulate",
+      "type": "serial",
       "device": "betatrack-serial",
-      "serial": "/dev/tty.usbserial-14330",
-      "baud": 115200
+      "serial": "/dev/tty.usbserial-230",
+      "baud": 115200,
+      "status": "fail"
     },
     {
       "id": "audio",
       "type": "audio",
-      "device": "MacMini"
+      "device": "MacMini",
+      "connection": {}
     }
   ],
   "apiHost": "localhost",

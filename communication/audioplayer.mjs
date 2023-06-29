@@ -17,16 +17,19 @@ const playSound = async (cmd) => {
   }
 }
 
-const connect = () => ({
-  write: (data, onError) => {
-    try {
-      log.debug('[AUDIOPLAYER] write', data);
-      data.map(playSound);
-    } catch (err) {
-      onError(err);
-    }
+const write = (data, onError) => {
+  try {
+    log.debug('[AUDIOPLAYER] write', data);
+    data.map(playSound);
+  } catch (err) {
+    onError(err);
   }
-});
+}
+
+const connect = () => {
+  log.start('[AUDIOPLAYER] connected');
+  return {write }
+};
 
 const send = (port, data) => {
   log.debug('[AUDIOPLAYER] send', data);

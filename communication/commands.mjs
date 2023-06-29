@@ -1,6 +1,9 @@
-import { getById as getEffectById } from '../modules/effects.mjs';
+import axios from 'axios';
+// import { getById as getEffectById } from '../modules/effects.mjs';
 import interfaces from '../communication/interfaces.mjs';
 import log from '../core/logger.mjs';
+
+const layoutId = 'betatrack'; // TODO: move to config
 
 const tunroutCommand = turnout => {
   switch(turnout.config.type) {
@@ -48,9 +51,11 @@ const soundCommand = ({ file, interface: iFaceId }, state, delay) => ({
 });
 
 const effectCommand = (effect, action, delay) => {
+  log.debug('[COMMANDS] effectCommand', effect.type, action, delay);
   switch(effect.type) {
     case 'light':
     case 'frog':
+      log.debug('[COMMANDS] light', effect);
       return pinCommand(action, effect.state, delay);
     case 'signal':
       return pinCommand(action, effect.state == action.state, delay);
@@ -62,24 +67,32 @@ const effectCommand = (effect, action, delay) => {
   }
 }
 
-export const build = (module, commandType) => {
+export const build = async (msg) => {
+  log.debug('[COMMANDS] build', msg);
+  const { action, payload } = msg;
   let commandList = [];
-  switch(commandType) {
-    case 'turnout':
-      const turnout = module;
+  switch(action) {
+    case 'turnouts':
+      const turnout = payload;
       commandList.push(tunroutCommand(turnout));
       // TO DO: refactor
-      turnout.effects && turnout.effects.filter(efx => !efx.delay).map(turnoutEffect => {
-        const effect = getEffectById(turnoutEffect.effectId);
-        effect.state = turnoutEffect.state;
-        const effectCommandList = effect?.actions.map(action => effectCommand(effect, action, turnoutEffect.delay));
-        commandList = commandList.concat(effectCommandList);
-      });
+      // turnout.effects && turnout.effects.filter(efx => !efx.delay).map(turnoutEffect => {
+      //   const effect = getEffectById(turnoutEffect.effectId);
+      //   effect.state = turnoutEffect.state;
+      //   const effectCommandList = effect?.actions.map(action => effectCommand(effect, action, turnoutEffect.delay));
+      //   commandList = commandList.concat(effectCommandList);
+      // });
       break;
-    case 'effect':
-      const effect = module;
-      const effectCommandList = module.actions.map(action => effectCommand(effect, action));
-      commandList = commandList.concat(effectCommandList);
+    case 'effects':
+      const resp = await axios.get(`http://127.0.0.1:5001/api/${layoutId}/effects/${payload.effectId}`);
+      const effect = resp.data;
+      effect.state = payload.state;
+      
+      log.debug('[COMMANDS] effect', effect, resp.data, typeof effect, typeof resp.data, msg);
+      const effectCommandList = effect?.actions?.map(action => effectCommand(effect, action));
+      if (effectCommandList?.length > 0) {
+        commandList = commandList.concat(effectCommandList);
+      }
       break;
     default: 
       // no op
@@ -90,13 +103,19 @@ export const build = (module, commandType) => {
 }
 
 export const send = (commands) => {
+  log.debug('[COMMANDS] send', commands);
   const coms = [...new Set(commands.map(cmd => cmd.iFaceId))];
   log.debug('[COMMANDS] coms', coms);
   const cmdFormatter = ({ action, payload }) => ({ action, payload });
   coms.map(iFaceId => {
-    const { send, connection } = interfaces.interfaces[iFaceId];
-    send(connection, commands.map(cmdFormatter));
+    try {
+      const { send, connection } = interfaces.interfaces[iFaceId];
+      send(connection, commands.map(cmdFormatter));
+    } catch (err) {
+      log.error('[COMMANDS] send error', iFaceId, err);
+    }
   });
+  
 };
 
 export default {

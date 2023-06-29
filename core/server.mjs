@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import { reduce } from './reducer.mjs';
+import interfaces from '../communication/interfaces.mjs';
 import log from './logger.mjs'
 
 const port = 8080; // TODO: move to config
@@ -8,15 +8,7 @@ const serverId = 'TamarackJunctionWebsocketServer'; // TODO: move to config
 const MSG_CONNECTED = JSON.stringify({
   action: 'message',
   payload: `${serverId} is connected`
-})
-
-const receiveMessage = (data, ws) => {
-  const msg = JSON.parse(data);
-  const { action } = msg;
-  const payload = reduce(msg);
-  const command = JSON.stringify({ action, payload });
-  payload && ws.send(command);
-}
+});
 
 const handleClose = () => {
   log.info('[SERVER] connection closed');
@@ -36,7 +28,8 @@ const handleConnection = ws => {
   ws.on('close', handleClose);
 
   // handling what to do when messageis recieved
-  ws.on('message', (data) => receiveMessage(data, ws));
+  ws.on('message', async (msg) => 
+    await interfaces.handleCommands(JSON.parse(msg), ws));
 
   // sending message to client
   ws.send(MSG_CONNECTED);

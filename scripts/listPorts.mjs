@@ -1,5 +1,11 @@
 import { SerialPort } from 'serialport';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import log from '../core/logger.mjs';
+
+const nodePath = path.resolve(process.argv[1]);
+const modulePath = path.resolve(fileURLToPath(import.meta.url))
+const isRunningDirectlyViaCLI = nodePath === modulePath;
 
 export const getPorts = async () => {
   try {
@@ -15,6 +21,6 @@ const main = async () => {
   serialPortPaths.map(path => log.info(path));
 }
 
-main();
+isRunningDirectlyViaCLI && main();
 
 export default getPorts;
